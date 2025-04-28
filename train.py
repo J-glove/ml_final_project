@@ -206,9 +206,9 @@ def main(args):
 
         print('Generating loss and accuracy plots')
         plot_data(acc_plot, 'UFCN Train Accuracy', 'Iterations', 'Accuracy', 
-                'afim_acc')
+                'UFCN_acc')
         plot_data(loss_plot, 'UFCN Train Loss', 'Iterations', 'Loss', 
-                'afim_loss')
+                'UFCN_loss')
 
 
 
