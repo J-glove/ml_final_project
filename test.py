@@ -37,8 +37,15 @@ def main(args):
     
     
     # Retrieve model
-    model = AFIM()
-    model.load_state_dict(torch.load(args.model, weights_only=True))
+    if args.model == 'afim':
+        model = AFIM()
+    elif args.model == 'ufcn':
+        model = UFCN()
+    else:
+        print('Unrecognized model - exiting...')
+        quit(-1)
+
+    model.load_state_dict(torch.load(args.model_path, weights_only=True))
     
     model.to(device)
     model.eval()
@@ -83,6 +90,10 @@ if __name__=='__main__':
         type=str
     )
 
+    parser.add_argument(
+        '--model_path',
+        type=str
+    )
     parser.add_argument(
         "--data",
         type=str,

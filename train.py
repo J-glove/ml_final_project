@@ -22,7 +22,15 @@ from models import AFIM, UFCN
 
 # Metric
 import time
-
+def plot_data(data, title, x_label, y_label, f_name):
+    # data ds should have entries like [x,y] where x is epoch + iteration/batchsize
+    # and y is whatever is measured (loss, accuracy)
+    plt.figure()
+    plt.title(title)
+    plt.plot(data)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+    plt.savefig(f'plots/{f_name}.png')
 
 def main(args):
     batch_size=args.bs
@@ -56,7 +64,9 @@ def main(args):
     #============================
 
 
-
+    # Define metrics ds' for graphing
+    acc_plot = []
+    loss_plot = []
 
     # Train AFIM network
     loss_function = nn.CrossEntropyLoss()
@@ -89,13 +99,17 @@ def main(args):
             curr_loss.backward()
             optimizer.step()
 
-            if i % 10 == 0:
+            if i % 9 == 0: #Offset by 1 for 0 index of i
                 avg_loss = loss / 10
                 avg_acc = (accuracy / 10) * 100
                 print('Batch {0}, Loss: {1:.3f}, Accuracy: {2:.1f}%'.format(i+1,
                                                           avg_loss,
                                                           avg_acc))
                 
+
+                x = epoch + (i / batch_size)
+                loss_plot.append([x,avg_loss])
+                acc_plot.append([x, avg_acc])
 
 
                 accuracy=0.0
@@ -105,9 +119,16 @@ def main(args):
         run_time=end - start
         print(f"One epoch took {run_time:.2f} seconds")
 
+    print('Generating loss and accuracy plots')
+    plot_data(acc_plot, 'AFIM Train Accuracy', 'Iterations', 'Accuracy', 
+              'afim_acc')
+    plot_data(loss_plot, 'AFIM Train Loss', 'Iterations', 'Loss', 
+              'afim_loss')
 
     if save_model:
+        print(f'Saving model to {args.out}...')
         torch.save(afim.state_dict(), args.out)
+
 
 
 if __name__=='__main__':
