@@ -31,6 +31,7 @@ def plot_data(data, title, x_label, y_label, f_name):
     plt.xlabel(x_label)
     plt.ylabel(y_label)
     plt.savefig(f'/content/plots/{f_name}.png')
+    plt.close()
 
 def main(args):
     batch_size=args.bs
