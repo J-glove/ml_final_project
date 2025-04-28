@@ -59,6 +59,7 @@ def plot_data(data, name):
 
 def main(args):
     torch.cuda.empty_cache()
+    torch.cuda.memory_summary(device=None, abbreviated=False)
     batch_size=args.bs
     save_model=False
 
