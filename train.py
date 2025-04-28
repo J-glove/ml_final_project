@@ -166,23 +166,19 @@ def main(args):
                 term = 1
                 layerLoss = 0
                 for j in labelLoss:
-                    print(j.shape)
-                    print(labels.shape)
-                    print(labelLoss)
-
                     preds = j.mean(dim=[1,2,3])
 
-                    print(preds)
                     layerLoss = layerLoss + term * bce(preds.to(dtype = float), labels.to(dtype = float))
                     term -= 0.4
 
                 l2 = layerLoss / len(labelLoss)
 
-                loss +=  0.9 * l1 + 0.1 * l2
+                cur_loss =  0.9 * l1 + 0.1 * l2
+                loss += cur_loss.item()
                 #print(loss)
 
                 optimizer.zero_grad()
-                loss.backward()
+                cur_loss.backward()
                 optimizer.step()
                 epoch_loss += loss.item()
                 if i % 10 == 9: 
