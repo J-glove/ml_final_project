@@ -162,9 +162,9 @@ def main(args):
                 term = 1
                 layerLoss = 0
                 for j in labelLoss:
-                    preds = j.mean(dim=[1,2,3])
+                    map = j.mean(dim=[1,2,3])
 
-                    layerLoss = layerLoss + term * bce(preds.to(dtype = float), labels.to(dtype = float))
+                    layerLoss = layerLoss + term * bce(map.to(dtype = float), labels.to(dtype = float))
                     term -= 0.4
 
                 l2 = layerLoss / len(labelLoss)
@@ -172,9 +172,9 @@ def main(args):
                 cur_loss =  0.9 * l1 + 0.1 * l2
                 loss += cur_loss
 
-
-
-                correct = torch.sum(labels == torch.argmax(outputs, dim=1)).item()
+                logits_per_img = outputs.mean(dim=[2,3]).squeeze(1)
+                predictions = (logits_per_img > 0).long()
+                correct = torch.sum(labels == predictions).item()
                 accuracy += correct / batch_size
                 #print(loss)
 

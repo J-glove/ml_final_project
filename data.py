@@ -59,7 +59,7 @@ class MIAS(Dataset):
         prior_image = bw_transform(prior_image)
         prior_image = transform(prior_image)
         
-        print(prior_image.shape)
+        
         if self.prior:
             return image, prior_image, classification
         else:

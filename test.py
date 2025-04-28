@@ -26,21 +26,26 @@ import time
 
 
 def main(args):
-
-    # Use GPU if possible
     device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
     
-    # Import data
-    metadata = os.path.join(args.data, 'test.txt')
-    ds = MIAS(metadata, args.data)
-    ds_loader = DataLoader(ds)
-    
-    
+
     # Retrieve model
     if args.model == 'afim':
         model = AFIM()
+
+        # Import data
+        metadata = os.path.join(args.data, 'test.txt')
+        ds = MIAS(metadata, args.data)
+        ds_loader = DataLoader(ds)
+    
     elif args.model == 'ufcn':
         model = UFCN()
+
+        # Import data
+        metadata = os.path.join(args.data, 'test.txt')
+        ds = MIAS(metadata, args.data, prior=True)
+        ds_loader = DataLoader(ds)
+    
     else:
         print('Unrecognized model - exiting...')
         quit(-1)
