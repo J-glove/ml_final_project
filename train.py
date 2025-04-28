@@ -43,7 +43,6 @@ def main(args):
     afim = AFIM()
     afim.to(device)
 
-    print(ds.__len__())
 
     #========== Debug ===========
 
@@ -64,10 +63,6 @@ def main(args):
     optimizer = optim.Adam(afim.parameters())
 
     epochs= args.epochs
-
-    # Hold the loss and accuracy for plotting later
-    afim_loss = []
-    afim_acc = []
     start = time.time()
     for epoch in range(epochs):
         print(f'Epoch: {epoch+1}\n')
@@ -113,18 +108,6 @@ def main(args):
 
     if save_model:
         torch.save(afim.state_dict(), args.out)
-
-
-        
-
-    #show_image(img)
-
-
-
-    #afim = AFIM()
-
-
-
 
 
 if __name__=='__main__':

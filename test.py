@@ -31,7 +31,7 @@ def main(args):
     device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
     
     # Import data
-    metadata = os.path.join(args.data, 'info.txt')
+    metadata = os.path.join(args.data, 'test.txt')
     ds = MIAS(metadata, args.data)
     ds_loader = DataLoader(ds)
     
