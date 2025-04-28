@@ -5,6 +5,8 @@ import torchvision.transforms as transforms
 import torch.nn as nn
 import torch.optim as optim
 import matplotlib.pyplot as plt
+import argparse
+import os
 
 from matplotlib.patches import Circle
 
@@ -55,16 +57,19 @@ def plot_data(data, name):
     print('')
 
 
-def main():
+def main(args):
     batch_size=8
     save_model=False
+
+    data = args.data
+
 
     # Check for CUDA hardware and use if available.
     device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 
-
+    train_meta = os.path.join(data, 'train.txt')
     # Load the dataset
-    ds = MIAS('data_set/train/train.txt', 'data_set/train')
+    ds = MIAS(train_meta, data)
     ds_loader = DataLoader(ds, batch_size=batch_size, shuffle=True)
 
     # Declare the AFIM network and pass to the hardware accelerator
@@ -150,4 +155,12 @@ def main():
 
 
 if __name__=='__main__':
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--data",
+        type=str,
+        required=True
+    )
+
+    args = parser.parse_args()
+    main(args)
