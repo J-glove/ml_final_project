@@ -98,7 +98,7 @@ def main(args):
     loss_function = nn.CrossEntropyLoss()
     optimizer = optim.Adam(afim.parameters())
 
-    epochs=1
+    epochs= args.epochs
 
     # Hold the loss and accuracy for plotting later
     afim_loss = []
@@ -129,12 +129,10 @@ def main(args):
                 print(f'Loss: {loss}')
                 #afim_acc.append([i, accuracy])
                 afim_loss.append([i,loss])
-            break
         
         end = time.time()
         run_time=end - start
         print(f"One epoch took {run_time:.2f} seconds")
-        break
 
 
     plot_data(afim_acc, "AFIM: Accuracy (Test)")
@@ -169,6 +167,13 @@ if __name__=='__main__':
         type=int,
         required=False,
         default=8
+    )
+
+    parser.add_argument(
+        '--epochs',
+        type=int,
+        default=10
+
     )
     args = parser.parse_args()
     main(args)
