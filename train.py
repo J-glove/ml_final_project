@@ -30,7 +30,7 @@ def plot_data(data, title, x_label, y_label, f_name):
     plt.plot(data)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
-    plt.savefig(f'plots/{f_name}.png')
+    plt.savefig(f'/content/plots/{f_name}.png')
 
 def main(args):
     batch_size=args.bs
@@ -99,7 +99,7 @@ def main(args):
             curr_loss.backward()
             optimizer.step()
 
-            if i % 10 == 1: 
+            if i % 10 == 9: 
                 avg_loss = loss / 10
                 avg_acc = (accuracy / 10) * 100
                 print('Batch {0}, Loss: {1:.3f}, Accuracy: {2:.1f}%'.format(i+1,
