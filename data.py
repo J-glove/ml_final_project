@@ -63,6 +63,9 @@ class MIAS(Dataset):
         
 
         if self.prior:
+            prior_image = prior_image.resize([512,512])
+            prior_image = bw_transform(prior_image)
+            prior_image = transform(prior_image)
             return image, prior_image, classification
         else:
             return image, classification
