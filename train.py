@@ -99,7 +99,7 @@ def main(args):
             curr_loss.backward()
             optimizer.step()
 
-            if i % 9 == 0: #Offset by 1 for 0 index of i
+            if i % 10 == 1: 
                 avg_loss = loss / 10
                 avg_acc = (accuracy / 10) * 100
                 print('Batch {0}, Loss: {1:.3f}, Accuracy: {2:.1f}%'.format(i+1,
