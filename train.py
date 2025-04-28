@@ -174,7 +174,7 @@ def main(args):
                 l2 = layerLoss / len(labelLoss)
 
                 cur_loss =  0.9 * l1 + 0.1 * l2
-                loss += cur_loss.item()
+                loss += cur_loss
                 #print(loss)
 
                 optimizer.zero_grad()
