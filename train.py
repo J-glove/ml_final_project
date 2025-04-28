@@ -157,10 +157,6 @@ def main(args):
                 step += 1
                 data_range = inputs1.max().unsqueeze(0)
                 outputs, _, labelLoss  = ufcn(inputs1, inputs2)
-        
-                print(data_range.shape)
-                print(outputs.shape)
-                print(inputs1.shape)
                 l1 = loss_function(outputs, inputs1)
 
                 term = 1
@@ -175,6 +171,11 @@ def main(args):
 
                 cur_loss =  0.9 * l1 + 0.1 * l2
                 loss += cur_loss
+
+
+
+                correct = torch.sum(labels == torch.argmax(outputs, dim=1)).item()
+                accuracy += correct / batch_size
                 #print(loss)
 
                 optimizer.zero_grad()
