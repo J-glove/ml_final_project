@@ -58,6 +58,7 @@ def plot_data(data, name):
 
 
 def main(args):
+    torch.cuda.empty_cache()
     batch_size=8
     save_model=False
 
