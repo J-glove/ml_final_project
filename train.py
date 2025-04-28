@@ -58,8 +58,6 @@ def plot_data(data, name):
 
 
 def main(args):
-    torch.cuda.empty_cache()
-    torch.cuda.memory_summary(device=None, abbreviated=False)
     batch_size=args.bs
     save_model=False
 
@@ -112,6 +110,8 @@ def main(args):
         accuracy = 0.0
 
         for i, data in enumerate(ds_loader):
+            
+            torch.cuda.empty_cache()
             print(f"Batch #{i}")
             inputs = data[0].to(device)
             labels = data[1].to(device)
