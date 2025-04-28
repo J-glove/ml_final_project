@@ -40,6 +40,7 @@ class MIAS(Dataset):
         else:
             img_path = os.path.join(self.img_dir,f'{self.img_labels.iloc[idx,0]}.png')
         image = Image.open(img_path)
+        image = image.resize(512,512)
         #image = torch.flip(image, dims=[2]) # Otherwise the image is completely flipped
 
 
