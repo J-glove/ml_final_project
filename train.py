@@ -25,9 +25,12 @@ import time
 def plot_data(data, title, x_label, y_label, f_name):
     # data ds should have entries like [x,y] where x is epoch + iteration/batchsize
     # and y is whatever is measured (loss, accuracy)
+
+    x,y = zip(*data)
+
     plt.figure()
     plt.title(title)
-    plt.plot(data)
+    plt.plot(x, y)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
     plt.savefig(f'/content/plots/{f_name}.png')
