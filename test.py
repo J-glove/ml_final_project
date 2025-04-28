@@ -38,7 +38,7 @@ def main(args):
     
     # Retrieve model
     model = AFIM()
-    model.load_state_dict(args.model, weights_only=False)
+    model.load_state_dict(torch.load(args.model, weights_only=True))
     
     model.to(device)
     model.eval()
