@@ -11,15 +11,16 @@ from PIL import Image
 from torch.utils.data import Dataset
 from torchvision.io import decode_image
 
+# Turn into a binary classification problem
 labels = {
         
-        "CALC":0,
+        "CALC":1,
         "CIRC":1,
-        "SPIC":2,
-        "MISC":3,
-        "ARCH":4,
-        "ASYM":5,
-        "NORM":6
+        "SPIC":1,
+        "MISC":1,
+        "ARCH":1,
+        "ASYM":1,
+        "NORM":0
     }
 
 class MIAS(Dataset):
@@ -36,11 +37,14 @@ class MIAS(Dataset):
     def __getitem__(self, idx):
         if self.prior: 
             # Pull the priors data if requested at classs instantiation
-            img_path = os.path.join(self.img_dir, 'priors' ,f'{self.img_labels.iloc[idx,0]}_prior.png')
-        else:
-            img_path = os.path.join(self.img_dir,f'{self.img_labels.iloc[idx,0]}.png')
+            prior_img_path = os.path.join(self.img_dir, 'priors' ,f'{self.img_labels.iloc[idx,0]}_prior.png')
+        #else:
+        img_path = os.path.join(self.img_dir,f'{self.img_labels.iloc[idx,0]}.png')
         image = Image.open(img_path)
         image = image.resize((512,512))
+
+        prior_image = Image.open(prior_img_path)
+        prior_image = prior_image.resize([512,512])
         #image = torch.flip(image, dims=[2]) # Otherwise the image is completely flipped
 
 
@@ -52,6 +56,14 @@ class MIAS(Dataset):
         #radius = self.img_labels.iloc[idx, 6]
 
         transform = transforms.ToTensor()
+        bw_transform = transforms.Grayscale()
+
         image = transform(image)
+        prior_image = bw_transform(prior_image)
+        prior_image = transform(prior_image)
         
-        return image, classification
+        print(prior_image.shape)
+        if self.prior:
+            return image, prior_image, classification
+        else:
+            return image, classification
