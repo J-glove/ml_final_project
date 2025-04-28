@@ -24,42 +24,9 @@ from models import AFIM, UFCN
 import time
 
 
-# Debug for checking that the data is loaded correctly
-def show_image(img):
-    image = img[0].squeeze()
-    if img[4] != None:
-        cx, cy = img[4], img[5]      # center x,y
-        radius = img[6]              # radius
-
-        fig, ax = plt.subplots()
-        ax.imshow(image, cmap='gray')
-
-        # draw ring
-        ring = Circle((cx, cy),
-                    radius,
-                    edgecolor='red',    # ring color
-                    facecolor='none',   # no fill
-                    linewidth=2)
-        ax.add_patch(ring)
-
-        # draw center point
-        ax.scatter([cx], [cy],
-                c='red',
-                s=50,               # marker size
-                marker='x')
-        plt.axis('off')  # optional, to hide axes
-    
-    plt.show()
-
-
-def plot_data(data, name):
-    # Takes in the loss or accuracy data and creates a plot and saves it
-    print('')
-
-
 def main(args):
     batch_size=args.bs
-    save_model=False
+    save_model=args.save
 
     data = args.data
 
@@ -112,7 +79,6 @@ def main(args):
         for i, data in enumerate(ds_loader):
             
             torch.cuda.empty_cache()
-            print(f"Batch #{i}")
             inputs = data[0].to(device)
             labels = data[1].to(device)
 
@@ -124,22 +90,29 @@ def main(args):
 
             curr_loss = loss_function(outputs, labels)
             loss += curr_loss.item()
+
+            curr_loss.backward()
+            optimizer.step()
+
             if i % 10 == 0:
-                print(f'Acc: {accuracy}')
-                print(f'Loss: {loss}')
-                #afim_acc.append([i, accuracy])
-                afim_loss.append([i,loss])
+                avg_loss = loss / 10
+                avg_acc = (accuracy / 10) * 100
+                print('Batch {0}, Loss: {1:.3f}, Accuracy: {2:.1f}%'.format(i+1,
+                                                          avg_loss,
+                                                          avg_acc))
+                
+
+
+                accuracy=0.0
+                loss=0.0
         
         end = time.time()
         run_time=end - start
         print(f"One epoch took {run_time:.2f} seconds")
 
 
-    plot_data(afim_acc, "AFIM: Accuracy (Test)")
-    plot_data(afim_loss, "AFIM: Loss (Test)")
-
     if save_model:
-        torch.save(afim.state_dict(), 'saved_models/afim.pt')
+        torch.save(afim.state_dict(), args.out)
 
 
         
@@ -174,6 +147,17 @@ if __name__=='__main__':
         type=int,
         default=10
 
+    )
+    parser.add_argument(
+        '--out',
+        type=str,
+        required=False
+    )
+    parser.add_argument(
+        '--save',
+        required=False,
+        default=False,
+        type=bool
     )
     args = parser.parse_args()
     main(args)
