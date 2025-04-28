@@ -111,8 +111,8 @@ def main(args):
 
         for i, data in enumerate(ds_loader):
             print(f"Batch #{i}")
-            inputs = data[0]
-            labels = data[1]
+            inputs = data[0].to(device)
+            labels = data[1].to(device)
 
             optimizer.zero_grad()
             outputs = afim(inputs) 
