@@ -37,8 +37,6 @@ class MIAS(Dataset):
             prior_img_path = os.path.join(self.img_dir, 'priors' ,f'{self.img_labels.iloc[idx,0]}_prior.png')
             prior_image = Image.open(prior_img_path)
             prior_image = prior_image.resize([512,512])
-            prior_image = bw_transform(prior_image)
-            prior_image = transform(prior_image)
         #else:
         img_path = os.path.join(self.img_dir,f'{self.img_labels.iloc[idx,0]}.png')
         image = Image.open(img_path)
@@ -62,9 +60,6 @@ class MIAS(Dataset):
         
 
         if self.prior:
-            prior_image = prior_image.resize([512,512])
-
-            bw_transform = transforms.Grayscale()
             prior_image = bw_transform(prior_image)
             prior_image = transform(prior_image)
             return image, prior_image, classification
