@@ -38,8 +38,9 @@ def main(args):
     
     # Retrieve model
     model = torch.load(args.model, weights_only=False)
-    model.to(device)
     model.eval()
+    model.to(device)
+    
 
 
     pred_total = []
