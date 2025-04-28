@@ -2,14 +2,11 @@
 import os
 import pandas as pd
 
-import torch
-import torchvision
 import torchvision.transforms as transforms
 
 
 from PIL import Image
 from torch.utils.data import Dataset
-from torchvision.io import decode_image
 
 # Turn into a binary classification problem
 labels = {

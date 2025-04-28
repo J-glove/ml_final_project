@@ -1,6 +1,5 @@
 # pip imports
 import torch
-import torchvision
 import torchvision.transforms as transforms
 import torch.nn as nn
 import torch.optim as optim
@@ -8,11 +7,8 @@ import matplotlib.pyplot as plt
 import argparse
 import os
 import monai
-from monai.data import PersistentDataset, list_data_collate, SmartCacheDataset, partition_dataset
-from monai.inferers import sliding_window_inference
 from monai.metrics import DiceMetric
 from monai import transforms as mt
-from monai.visualize import plot_2d_or_3d_image
 
 from PIL import Image
 from torch.utils.data import DataLoader
