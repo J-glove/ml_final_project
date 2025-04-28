@@ -35,13 +35,16 @@ class MIAS(Dataset):
         if self.prior: 
             # Pull the priors data if requested at classs instantiation
             prior_img_path = os.path.join(self.img_dir, 'priors' ,f'{self.img_labels.iloc[idx,0]}_prior.png')
+            prior_image = Image.open(prior_img_path)
+            prior_image = prior_image.resize([512,512])
+            prior_image = bw_transform(prior_image)
+            prior_image = transform(prior_image)
         #else:
         img_path = os.path.join(self.img_dir,f'{self.img_labels.iloc[idx,0]}.png')
         image = Image.open(img_path)
         image = image.resize((512,512))
 
-        prior_image = Image.open(prior_img_path)
-        prior_image = prior_image.resize([512,512])
+        
         #image = torch.flip(image, dims=[2]) # Otherwise the image is completely flipped
 
 
@@ -56,10 +59,9 @@ class MIAS(Dataset):
         bw_transform = transforms.Grayscale()
 
         image = transform(image)
-        prior_image = bw_transform(prior_image)
-        prior_image = transform(prior_image)
         
         
+
         if self.prior:
             return image, prior_image, classification
         else:
