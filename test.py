@@ -59,12 +59,10 @@ def main(args):
                 labels = data[1].to(device)
 
                 outputs = model(inputs)
-
-                logits_per_img = outputs.mean(dim=[2,3]).squeeze(1)
-                predictions = (logits_per_img > 0).long()
+                _, predictions = torch.max(outputs, dim=1)
 
                 total += labels.size(0)
-                correct += torch.sum(labels == predictions).item()
+                correct += (predictions == labels).sum().item()
 
                 # get correct ds type for sklearn
                 pred_total.extend(predictions.cpu().numpy())
@@ -107,10 +105,12 @@ def main(args):
 
 
                 outputs, _, _ = model(inputs1, inputs2)
-                _, predictions = torch.max(outputs, dim=1)
+
+                logits_per_img = outputs.mean(dim=[2,3]).squeeze(1)
+                predictions = (logits_per_img > 0).long()
 
                 total += labels.size(0)
-                correct += (predictions == labels).sum().item()
+                correct = torch.sum(labels == predictions).item()
 
                 # get correct ds type for sklearn
                 pred_total.extend(predictions.cpu().numpy())
