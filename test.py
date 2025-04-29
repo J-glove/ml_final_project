@@ -37,7 +37,43 @@ def main(args):
         metadata = os.path.join(args.data, 'test.txt')
         ds = MIAS(metadata, args.data)
         ds_loader = DataLoader(ds)
+
+        model.load_state_dict(torch.load(args.model_path, weights_only=True))
     
+        model.to(device)
+        model.eval()
+        
+
+
+        pred_total = []
+        label_total = []
+
+
+        with torch.no_grad():
+            correct = 0
+            total = 0
+
+            for i, data in enumerate(ds_loader):
+
+                inputs = data[0].to(device)
+                labels = data[1].to(device)
+
+                outputs = model(inputs)
+                _, predictions = torch.max(outputs, dim=1)
+
+                total += labels.size(0)
+                correct += (predictions == labels).sum().item()
+
+                # get correct ds type for sklearn
+                pred_total.extend(predictions.cpu().numpy())
+                label_total.extend(labels.cpu().numpy())
+
+        accuracy = correct / total
+        print(f"Test accuracy: {accuracy*100:.2f}%")
+
+        print(f'Classification Report:')
+        print(classification_report(label_total, pred_total))
+        
     elif args.model == 'ufcn':
         model = UFCN()
 
@@ -45,46 +81,50 @@ def main(args):
         metadata = os.path.join(args.data, 'test.txt')
         ds = MIAS(metadata, args.data, prior=True)
         ds_loader = DataLoader(ds)
+
+        model.load_state_dict(torch.load(args.model_path, weights_only=True))
+    
+        model.to(device)
+        model.eval()
+        
+
+
+        pred_total = []
+        label_total = []
+
+
+        with torch.no_grad():
+            correct = 0
+            total = 0
+
+            for i, data in enumerate(ds_loader):
+
+                inputs1 = data[0].to(device)
+                inputs2 = data[1].to(device)
+                labels = data[2].to(device)
+
+
+                outputs, _, _ = model(inputs1, inputs2)
+                _, predictions = torch.max(outputs, dim=1)
+
+                total += labels.size(0)
+                correct += (predictions == labels).sum().item()
+
+                # get correct ds type for sklearn
+                pred_total.extend(predictions.cpu().numpy())
+                label_total.extend(labels.cpu().numpy())
+
+        accuracy = correct / total
+        print(f"Test accuracy: {accuracy*100:.2f}%")
+
+        print(f'Classification Report:')
+        print(classification_report(label_total, pred_total))
     
     else:
         print('Unrecognized model - exiting...')
         quit(-1)
 
-    model.load_state_dict(torch.load(args.model_path, weights_only=True))
     
-    model.to(device)
-    model.eval()
-    
-
-
-    pred_total = []
-    label_total = []
-
-
-    with torch.no_grad():
-        correct = 0
-        total = 0
-
-        for i, data in enumerate(ds_loader):
-
-            inputs = data[0].to(device)
-            labels = data[1].to(device)
-
-            outputs = model(inputs)
-            _, predictions = torch.max(outputs, dim=1)
-
-            total += labels.size(0)
-            correct += (predictions == labels).sum().item()
-
-            # get correct ds type for sklearn
-            pred_total.extend(predictions.cpu().numpy())
-            label_total.extend(labels.cpu().numpy())
-
-    accuracy = correct / total
-    print(f"Test accuracy: {accuracy*100:.2f}%")
-
-    print(f'Classification Report:')
-    print(classification_report(label_total, pred_total))
 
 
 
