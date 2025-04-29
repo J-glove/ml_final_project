@@ -53,7 +53,9 @@ def main(args):
         # Load the dataset
         ds = MIAS(train_meta, data)
         ds_loader = DataLoader(ds, batch_size=batch_size, shuffle=True)
-        # Declare the AFIM network and pass to the hardware accelerator
+
+
+        # Declare the AFIM network
         afim = AFIM()
         afim.to(device)
 
@@ -204,6 +206,8 @@ def main(args):
             epoch_loss_values.append(epoch_loss)
             print(f"epoch {epoch + 1} average loss: {epoch_loss:.4f}")
 
+        print(acc_plot.shape)
+        print(loss_plot.shape)
         print('Generating loss and accuracy plots')
         plot_data(acc_plot, 'UFCN Train Accuracy', 'Iterations', 'Accuracy', 
                 'UFCN_acc')
