@@ -195,8 +195,6 @@ def main(args):
 
                     x = epoch + (i / batch_size)
 
-                    print(f'Type avgloss: {type(avg_loss)}')
-                    print(f'Type avg_acc: {type(avg_acc)}')
                     loss_plot.append([x,avg_loss])
                     acc_plot.append([x, avg_acc])
 
