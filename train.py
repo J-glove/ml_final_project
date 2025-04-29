@@ -120,6 +120,10 @@ def main(args):
         plot_data(loss_plot, 'AFIM Train Loss', 'Iterations', 'Loss', 
                 'afim_loss')
         
+        if save_model:
+            print(f'Saving model to {args.out}...')
+            torch.save(afim.state_dict(), args.out)
+        
     elif args.model=='ufcn':
         ds = MIAS(train_meta, data, prior=True)
         ds_loader = DataLoader(ds, batch_size=batch_size, shuffle=True)
@@ -216,15 +220,16 @@ def main(args):
         plot_data(loss_plot, 'UFCN Train Loss', 'Iterations', 'Loss', 
                 'UFCN_loss')
 
+        if save_model:
+            print(f'Saving model to {args.out}...')
+            torch.save(ufcn.state_dict(), args.out)
 
 
     else:
         print('Invalid model')
         quit(-1)
 
-    if save_model:
-        print(f'Saving model to {args.out}...')
-        torch.save(afim.state_dict(), args.out)
+    
 
 
 
