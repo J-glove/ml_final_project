@@ -183,7 +183,7 @@ def main(args):
                 optimizer.zero_grad()
                 cur_loss.backward()
                 optimizer.step()
-                epoch_loss += loss.item()
+                epoch_loss += cur_loss.item()
                 if i % 10 == 9: 
                     avg_loss = loss / 10
                     avg_acc = (accuracy / 10) * 100
@@ -193,6 +193,9 @@ def main(args):
                     
 
                     x = epoch + (i / batch_size)
+
+                    print(f'Type avgloss: {type(avg_loss)}')
+                    print(f'Type avg_acc: {type(avg_acc)}')
                     loss_plot.append([x,avg_loss])
                     acc_plot.append([x, avg_acc])
 
@@ -206,8 +209,8 @@ def main(args):
             epoch_loss_values.append(epoch_loss)
             print(f"epoch {epoch + 1} average loss: {epoch_loss:.4f}")
 
-        print(acc_plot.shape)
-        print(loss_plot.shape)
+        print(type(acc_plot))
+        print(type(loss_plot))
         print('Generating loss and accuracy plots')
         plot_data(acc_plot, 'UFCN Train Accuracy', 'Iterations', 'Accuracy', 
                 'UFCN_acc')
