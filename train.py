@@ -172,7 +172,8 @@ def main(args):
                 l2 = layerLoss / len(labelLoss)
 
                 cur_loss =  0.9 * l1 + 0.1 * l2
-                loss += cur_loss
+
+                loss += cur_loss.item()
 
                 logits_per_img = outputs.mean(dim=[2,3]).squeeze(1)
                 predictions = (logits_per_img > 0).long()
