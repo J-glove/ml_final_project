@@ -103,7 +103,7 @@ class afim_layer(nn.Module):
 #======================================================
 class UFCN(nn.Module):
     # Model pulled from https://github.com/NabaviLab/ufcn/tree/main
-    def __init__(self, img_ch = 1, output_ch = 1, block1Ch = 64, block2Ch = 128, block3Ch = 256, block4Ch = 512, block5Ch = 1024, activation = 'Relu', threshold = 0.0):
+    def __init__(self, img_ch = 1, output_ch = 1, block1Ch = 64, block2Ch = 128, block3Ch = 256, block4Ch = 512, block5Ch = 1024, activation = 'ReLU', threshold = 0.0):
         super(UFCN, self).__init__()
 
         self.Maxpool = nn.MaxPool2d(kernel_size = 2, stride = 2)
